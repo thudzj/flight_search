@@ -13,11 +13,13 @@ from dateutil.parser import parse
 import requests
 from urllib.parse import urlencode
 import hashlib
+from fake_useragent import UserAgent
  
 def crawl_ctrip(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
   fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
   returndate = datetime.datetime.strptime(returndate,'%Y-%m-%d') if returndate else None
   url = 'https://flights.ctrip.com/itinerary/oneway/%s-%s?date=%s' % (fromcode,tocode,fromdate)
+  print(url)
   headers = {
     "Host": "flights.ctrip.com",
     "User-Agent": useragent,
@@ -26,7 +28,7 @@ def crawl_ctrip(fromcity, fromcode, tocity, tocode, fromdate, returndate, userag
   }
   req = urllib.request.Request(url,headers=headers)
   body = urllib.request.urlopen(req,timeout=30).read()
-  
+  #print(body)
   #parse(body)
   
   return []
@@ -35,6 +37,7 @@ def crawl_qunar(fromcity, fromcode, tocity, tocode, fromdate, returndate, userag
   fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
   returndate = datetime.datetime.strptime(returndate,'%Y-%m-%d') if returndate else None
   url = 'https://flight.qunar.com/site/oneway_list.htm'
+  print(url)
   
   headers = {
     "User-Agent": useragent,
@@ -54,6 +57,7 @@ def crawl_qunar(fromcity, fromcode, tocity, tocode, fromdate, returndate, userag
       'lowestPrice': 'null'
   }
   r = requests.get(url, params=data, headers=headers)
+  # print(r.text)
   # soup = BS(r.text, 'html')
   # for item in soup.findAll('strong'):
     # ...
@@ -80,18 +84,164 @@ def crawl_tripsky(fromcity, fromcode, tocity, tocode, fromdate, returndate, user
 
   # 使用md5加密
   sign = hashlib.md5(sign.encode('utf-8')).hexdigest()
-  print(sign)
+  #print(sign)
 
   # 将sign添加到data字典
   data['sign'] = sign
-  print(data)
+  #print(data)
 
   # 发送post请求
   response = requests.post(url, data=data).content
   print(response)
   return response
 
+def crawl_ceair(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  mon = str(fromdate.month)
+  fromdate = str(fromdate.year)[2:] + (mon if len(mon) == 2 else '0'+mon) + str(fromdate.day)
+  
+  url = 'http://www.ceair.com/booking/%s-%s-%s_CNY.html' % (fromcode, tocode, fromdate)
+  print(url)
+  
+  headers = {
+    "User-Agent": useragent,
+    "Referer": "http://www.ceair.com",
+    "Connection": "keep-alive",
+  }
+  req = urllib.request.Request(url,headers=headers)
+  body = urllib.request.urlopen(req,timeout=30).read()
+  return []
+
+def crawl_csair(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  
+  url = 'https://b2c.csair.com/B2C40/newTrips/static/main/page/booking/index.html?t=S&c1=%s&c2=%s&d1=%s&at=1&ct=0&it=0' % (fromcode, tocode, fromdate)
+  print(url)
+  
+  headers = {
+    "User-Agent": useragent,
+    "Referer": "http://www.csair.com",
+    "Connection": "keep-alive",
+  }
+  req = urllib.request.Request(url,headers=headers)
+  body = urllib.request.urlopen(req,timeout=30).read()
+  return []
  
+def crawl_xiamenair(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  returndate = datetime.datetime.strptime(returndate,'%Y-%m-%d') if returndate else None
+  url = 'https://www.xiamenair.com/zh-cn/nticket.html'
+  
+  ua = UserAgent()
+  headers = {
+    "User-Agent": ua.random,
+    "Referer": "https://www.xiamenair.com",
+    "Connection": "keep-alive",
+  }
+  data = {
+      'tripType':'OW',
+      'orgCode': fromcode,
+      'dstCode': tocode,
+      'orgCityName': fromcity,
+      'dstCityName': tocity,
+      'orgDate': fromdate,
+      'dstDate': '',
+      'isInter': 'false',
+      'orgIsintl': '0',
+      'dstIsintl': '0',
+      'adtNum': '1',
+      'chdNum': '0',
+      'JFCabinFirst': 'false',
+      'jcgm': 'false',
+      'acntCd': ''
+  }
+  print(url + "?" + urlencode(data))
+  # req = urllib.request.Request(url + "?" + urlencode(data),headers=headers)
+  # body = urllib.request.urlopen(req,timeout=30).read()
+  # print(body)
+  r = requests.get(url, params=data, headers=headers)
+  # soup = BS(r.text, 'html')
+  # for item in soup.findAll('strong'):
+    # ...
+  return []
+
+def crawl_jdair(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  
+  url = 'https://jipiao.jd.com/ticketquery/flightSearch.action'
+  print(url)
+  
+  data = {
+    "query.depCity":fromcity,
+    "query.arrCity":tocity,
+    "query.depCityCode":"undefined",
+    "query.arrCityCode":"undefined",
+    "query.depAirportCode":"undefined",
+    "query.arrAirportCode":"undefined",
+    "query.lineType":"OW",
+    "query.depDate":fromdate,
+    "query.arrDate":fromdate,
+    "query.goTime":"undefined",
+    "query.backTime":"undefined",
+    "query.classNo":"%20",
+    "query.queryModule":"1",
+    "query.hasChild":"false",
+    "query.hasInfant":"false",
+    "query.oneBox":"",
+    "query.queryType":"jipiaoindexquery",
+    "query.source":"0"
+  }
+  
+  headers = {
+    "User-Agent": useragent,
+    "Referer": "http://www.jd.com",
+    "Connection": "keep-alive",
+  }
+  r = requests.get(url, params=data, headers=headers)
+  return []
+  
+def crawl_elong(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  
+  url = 'http://flight.elong.com/flightsearch/list?departdate=%s&backdate=&seatlevel=Y&departCity=%s&arriveCity=%s&searchType=0&if=14551' % (fromdate, fromcode, tocode)
+  print(url)
+  
+  headers = {
+    "User-Agent": useragent,
+    "Referer": "http://www.elong.com",
+    "Connection": "keep-alive",
+  }
+  req = urllib.request.Request(url,headers=headers)
+  body = urllib.request.urlopen(req,timeout=30).read()
+  return []
+  
+def crawl_mafengwo(fromcity, fromcode, tocity, tocode, fromdate, returndate, useragent):
+  fromdate = datetime.datetime.strptime(fromdate,'%Y-%m-%d').date()
+  returndate = datetime.datetime.strptime(returndate,'%Y-%m-%d') if returndate else None
+  url = 'https://www.mafengwo.cn/flight/list'
+  print(url)
+  
+  headers = {
+    "User-Agent": useragent,
+    "Referer": "www.mafengwo.cn",
+    "Connection": "keep-alive",
+  }
+  data = {
+      'departCity': fromcity,
+      'departCode': fromcode,
+      'destCity': tocity,
+      'destCode': tocode,
+      'type': 'oneWay',
+      'departDate': str(fromdate),
+      'destDate': '',
+  }
+  r = requests.get(url, params=data, headers=headers)
+  # print(r.text)
+  # soup = BS(r.text, 'html')
+  # for item in soup.findAll('strong'):
+    # ...
+  return []
+
 class FLIGHT(object):
   def __init__(self):
     self.Airline = {} #航空公司代码
@@ -99,7 +249,7 @@ class FLIGHT(object):
     self.url = ''
     self.headers = {}
     self.city={"AAT":"阿勒泰","ACX":"兴义","AEB":"百色","AKU":"阿克苏","AOG":"鞍山","AQG":"安庆","AVA":"安顺","AXF":"阿拉善左旗","BAV":"包头","BFJ":"毕节","BHY":"北海"
-    ,"BJS":"北京","BPE":"秦皇岛","BPL":"博乐","BPX":"昌都","BSD":"保山","CAN":"广州","CDE":"承德","CGD":"常德","CGO":"郑州","CGQ":"长春","CHG":"朝阳","CIF":"赤峰"
+    ,"PEK":"北京","BPE":"秦皇岛","BPL":"博乐","BPX":"昌都","BSD":"保山","CAN":"广州","CDE":"承德","CGD":"常德","CGO":"郑州","CGQ":"长春","CHG":"朝阳","CIF":"赤峰"
     ,"CIH":"长治","CKG":"重庆","CSX":"长沙","CTU":"成都","CWJ":"沧源","CYI":"嘉义","CZX":"常州","DAT":"大同","DAX":"达县","DBC":"白城","DCY":"稻城","DDG":"丹东"
     ,"DIG":"香格里拉(迪庆)","DLC":"大连","DLU":"大理","DNH":"敦煌","DOY":"东营","DQA":"大庆","DSN":"鄂尔多斯","DYG":"张家界","EJN":"额济纳旗","ENH":"恩施"
     ,"ENY":"延安","ERL":"二连浩特","FOC":"福州","FUG":"阜阳","FUO":"佛山","FYJ":"抚远","GOQ":"格尔木","GYS":"广元","GYU":"固原","HAK":"海口","HDG":"邯郸"
@@ -130,7 +280,7 @@ class FLIGHT(object):
       "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11"
     ]
-    self.crawl_funcs = [crawl_ctrip, crawl_qunar, crawl_tripsky]
+    self.crawl_funcs = [crawl_ctrip, crawl_qunar, crawl_ceair, crawl_csair, crawl_xiamenair, crawl_jdair, crawl_elong, crawl_mafengwo]
   
   def respond_to_query(self, fromcity, tocity, fromdate, returndate=None):
     fromcode = list(self.city.keys())[list(self.city.values()).index(fromcity)]
