@@ -80,9 +80,6 @@ def xiecheng(dcity, acity, date):
  
  
 if __name__ == "__main__":
-    # dcity = input('请输入起点： ')
-    # acity = input('请输入终点： ')
-    # date = input('请输入出行日期： ')
     dcity = "北京"
     acity = "上海"
     date = "20190516"   
