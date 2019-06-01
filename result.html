@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<base href="index.html"></base>
+
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>xxx 搜索结果</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/logo-nav.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="figs/logo.png" height="50" alt="">
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
+                <form class="navbar-form navbar-left" role="search" style="width:40%" method="get" action="result.html">
+                    <div class="input-group" style="width:100%">
+                        <input type="text" class="form-control typeahead" name="query" placeholder="Search for..."
+                            value="xxx" data-provide="typeahead" autocomplete="off"> 
+                        <input type="hidden" name="type" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <span class="input-group-btn" style="width:15%">
+                            <button id="search-btn" class="btn btn-default" type="submit">Search</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </form><!-- /.col-lg-6 -->
+
+                <ul class="nav navbar-nav navbar-left nav-pills" id="types">
+                    
+                </ul>
+                
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <p id="total_num">找到相关结果共 xxx 个</p>
+            
+        <div class="search-results" >
+
+        </div>
+        <nav>
+
+            <ul class="pagination">
+                
+            </ul>
+        </nav>
+    </div>
+   
+    </div>
+
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/bootstrap3-typeahead.js"></script>
+    <script>
+var $input = $('.typeahead');
+$input.typeahead({
+    source: function(query, process){
+    url = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?json=0&wd="+query;
+    $.get(url, function(data){
+        data = data.replace('window.baidu.sug(', '').replace(');', '');
+        var obj = eval('('+data+')');
+        console.log(obj.s);
+        process([query].concat(obj.s));
+    }, 'text');
+    }, 
+    autoSelect: true,
+    afterSelect: function() {
+        $("#search-btn").click();
+    },
+    matcher: function(query) {
+        return true;
+    }
+}); 
+$input.change(function() {
+    var current = $input.typeahead("getActive");
+    if (current) {
+        //alert("something");
+        // Some item from your model is active!
+        if (current.name == $input.val()) {
+            // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+        } else {
+            // This means it is only a partial match, you can either add a new item 
+            // or take the active if you don't want new items
+        }
+    } else {
+        // Nothing is active so it is a new value (or maybe empty value)
+        //alert("nothing");
+        //$("#search-btn").click();
+    }
+});
+    </script>
+
+    <script type="text/javascript">
+        function GetUrlParam(paraName) {
+    　　　　var url = document.location.toString();
+    　　　　var arrObj = url.split("?");
+
+    　　　　if (arrObj.length > 1) {
+    　　　　　　var arrPara = arrObj[1].split("&");
+    　　　　　　var arr;
+
+    　　　　　　for (var i = 0; i < arrPara.length; i++) {
+    　　　　　　　　arr = arrPara[i].split("=");
+
+    　　　　　　　　if (arr != null && arr[0] == paraName) {
+    　　　　　　　　　　return arr[1];
+    　　　　　　　　}
+    　　　　　　}
+    　　　　　　return "";
+    　　　　}
+    　　　　else {
+    　　　　　　return "";
+    　　　　}
+        }
+
+        var query = GetUrlParam("query") 
+        var page = Number(GetUrlParam("page"))
+        var type = GetUrlParam("type")
+
+        $("title").html(query + "搜索结果"); 
+
+        $('input[name="query"]').val(query)
+        $('input[name="type"]').val(type)
+
+        var navi_url = "result.html?query=xxx&type=tt&page=1".replace(/xxx/, query)
+        var types = ["全部", "家常菜", "素菜", "下饭菜"]
+        for (var i = 0; i < types.length; i++) { 
+            var cur_navi_url = navi_url.replace(/tt/, i)
+            if (i == Number(type)) {
+                $("#types").append("<li class='active'><a href=" + cur_navi_url + ">" + types[i] + "</a></li>")
+            }
+            else{
+                $("#types").append("<li><a href=" + cur_navi_url + ">" + types[i] + "</a></li>")
+            }
+         }
+
+        // var function queryData() {
+        //         $.ajax({
+        //             url: "/get_data.json",
+        //             dataType: "json",
+        //             type: "POST",
+        //             data: {
+        //                 "query": query,
+        //                 "type": type,
+        //                 "page": page
+        //             },
+        //             success: function (result) {
+        //                 if (result.hasError == true) {
+        //                     alert("操作失败");
+        //                     return;
+        //                 }
+        //                 if (!result.content || result.content.isSuccess == false) {
+        //                    alert("操作失败");
+        //                 } else {
+        //                     showData(result.content.data);
+                            
+        //                 }
+        //             }
+        //         });
+        //     };
+
+
+        showData({"num_items_cur_page": 10,
+
+                "num_pages": 500,
+
+                "num_itmes_total": 5000,
+
+                "items": [
+
+                    {
+                        "type":3, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                    {
+                        "type":1, 
+                        "date":"2019-01-24", 
+                        "title": "鱼香肉丝", 
+                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
+                        "url": "https://www.xiachufang.com/recipe/100352761/", 
+                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
+                        "score": 8.5
+                    },
+
+                ]
+
+            })
+
+
+        function showData(data){
+            // console.log(data)
+            var num_items_cur_page = Number(data["num_items_cur_page"])
+            var num_pages = Number(data["num_pages"])
+            var num_itmes_total = Number(data["num_itmes_total"])
+            // console.log(num_items_cur_page)
+            // console.log(num_pages)
+            // console.log(num_itmes_total)
+            
+            // console.log($("#total_num").text())
+            $("#total_num").text("找到相关结果共" + data["num_itmes_total"] + "个")
+
+            for (var i = 0; i < num_items_cur_page; i++){
+                var cur_item = data["items"][i]
+                $('.search-results').append("<div class='panel panel-info'> <div class='panel-heading'><span class='label label-primary'>" + types[Number(cur_item["type"])] + "</span> &nbsp;<span class='label label-default' style='float:right'>" + cur_item["date"] + "</span> &nbsp;<span class='label label-info' style='float:right'>综合评分" + cur_item["score"] + "</span><a href=" + cur_item["url"] + " alt=" + cur_item["url"] + " target='_blank'> " + cur_item["title"] + "</a></div><div class='panel-body media' style='padding-top:0'><div class='media-left'><img class='media-object thumbnail' src=" + cur_item["imgurl"] + " alt=" + cur_item["imgurl"] + " style='max-width:250px; max-height:200px'></div><div class='media-body'>" + cur_item["content"] + "</div></div></div>")
+            }
+
+            if (page == 1){
+                $('.pagination').append("<li class='disabled'> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + (page-1) + " aria-label='Previous'> <span aria-hidden='true'>&laquo;</span></a></li>")
+            }else{
+                $('.pagination').append("<li> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + (page-1) + " aria-label='Previous'> <span aria-hidden='true'>&laquo;</span></a></li>")
+            }
+
+            for (var i = Math.max(1,page-5); i < page; i++){
+                $('.pagination').append("<li> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + i + ">" + i + " </a></li>")
+            }
+            $('.pagination').append("<li class='active'><span>" + page + " </span></li>")
+            for (var i = page+1; i <= num_pages && i <= page+5; i++){
+                $('.pagination').append("<li> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + i + ">" + i + " </a></li>")
+            }
+            if (page == num_pages){
+                $('.pagination').append("<li class='disabled'> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + (page+1) + " aria-label='Next'> <span aria-hidden='true'>&laquo;</span></a></li>")
+            }else{
+                $('.pagination').append("<li> <a href=" + "result.html?query=" + query + "&type=" + type + "&page=" + (page+1) + " aria-label='Next'> <span aria-hidden='true'>&raquo;</span></a></li>")
+            }
+        }
+
+    </script>>
+
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>菜谱搜索</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    .container {
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"></a>
+            </div>
+            
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <!--
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            -->
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-3"> </div>
+            <div class="col-lg-6 text-center">
+                <img src="figs/logo.png" alt=""></img>
+                <p class="lead"></p>
+                <form role="search" method="get" action="result.html">
+                    <div class="input-group">
+                        <input type="text" class="form-control typeahead" name="query" placeholder="Whatever you want to cook and eat" value=""
+                            data-provide="typeahead" autocomplete="off"> 
+                        </input>
+                        <input type="hidden" name="type" value="0">
+                        <input type="hidden" name="page" value="1">
+                      <span class="input-group-btn">
+                        <button id="search-btn" class="btn btn-default" type="submit">Search</button>
+                      </span>
+                    </div><!-- /input-group -->
+                </form>
+            </div>
+            <div class="col-lg-3"> </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/bootstrap3-typeahead.js"></script>
+    <script>
+var $input = $('.typeahead');
+$input.typeahead({
+    source: function(query, process){
+    url = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?json=0&wd="+query;
+    $.get(url, function(data){
+        data = data.replace('window.baidu.sug(', '').replace(');', '');
+        var obj = eval('('+data+')');
+        console.log(obj.s);
+        process([query].concat(obj.s));
+    }, 'text');
+    }, 
+    autoSelect: true,
+    afterSelect: function() {
+        $("#search-btn").click();
+    },
+    matcher: function(query) {
+        return true;
+    }
+}); 
+$input.change(function() {
+    var current = $input.typeahead("getActive");
+    if (current) {
+        //alert("something");
+        // Some item from your model is active!
+        if (current.name == $input.val()) {
+            // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+        } else {
+            // This means it is only a partial match, you can either add a new item 
+            // or take the active if you don't want new items
+        }
+    } else {
+        // Nothing is active so it is a new value (or maybe empty value)
+        //alert("nothing");
+        //$("#search-btn").click();
+    }
+});
+    </script>
+
+</body>
+
+</html>
