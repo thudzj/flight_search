@@ -181,143 +181,33 @@ $input.change(function() {
             }
          }
 
-        // var function queryData() {
-        //         $.ajax({
-        //             url: "/get_data.json",
-        //             dataType: "json",
-        //             type: "POST",
-        //             data: {
-        //                 "query": query,
-        //                 "type": type,
-        //                 "page": page
-        //             },
-        //             success: function (result) {
-        //                 if (result.hasError == true) {
-        //                     alert("操作失败");
-        //                     return;
-        //                 }
-        //                 if (!result.content || result.content.isSuccess == false) {
-        //                    alert("操作失败");
-        //                 } else {
-        //                     showData(result.content.data);
-                            
-        //                 }
-        //             }
-        //         });
-        //     };
-
-
-        showData({"num_items_cur_page": 10,
-
-                "num_pages": 500,
-
-                "num_itmes_total": 5000,
-
-                "items": [
-
-                    {
-                        "type":3, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
+        var function queryData() {
+                $.ajax({
+                    url: "/get_data.json",
+                    dataType: "json",
+                    type: "GET",
+                    data: {
+                        "query": query,
+                        "type": type,
+                        "page": page
                     },
+                    success: function (result) {
+                        if (result.hasError == true) {
+                            alert("操作失败");
+                            return;
+                        }
+                       if (!result.content || result.content.isSuccess == false) {
+                           alert("操作失败");
+                        } else {
+                            showData(result.content.data);
+                         
+                        }
+                    }
+                });
+            };
 
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
 
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                    {
-                        "type":1, 
-                        "date":"2019-01-24", 
-                        "title": "鱼香肉丝", 
-                        "content": "猪小排、料酒、盐、酱油、米醋、白糖、姜片、醋、酱油、料酒、盐、水淀粉、清水、葱姜蒜末", 
-                        "url": "https://www.xiachufang.com/recipe/100352761/", 
-                        "imgurl": "http://i2.chuimg.com/f3067a6e886111e6b87c0242ac110003_640w_640h.jpg?imageView2/2/w/660/interlace/1/q/90", 
-                        "score": 8.5
-                    },
-
-                ]
-
-            })
+       <!--  showData({"num_itmes_total": 1710, "num_pages": 171, "num_items_cur_page": 10, "items": [{"title": "tiger妈咪烘培系列之热狗面包卷", "ratingValue": -1, "recipe": ["高筋面粉", "火腿肠", "蛋液", "酵母", "牛奶", "黄油", "细砂糖", "奶粉", "糖", "盐"], "img": "http://i2.chuimg.com/96cf984f1af24d9ca211cc29214bf76a_1656w_1242h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "1", "url": "http://www.xiachufang.com/recipe/103827939/"}, {"title": "#美食#??椰蓉面包??", "ratingValue": -1, "recipe": ["高筋面粉", "糖", "无盐黄油", "牛奶或配方奶", "鸡蛋", "酵母", "盐", "椰蓉馅", "椰蓉", "无盐黄油", "蛋黄", "糖", "另准备一个鸡蛋和少量芝麻"], "img": "http://i2.chuimg.com/da679f9e323441b384261f4362a8d3ff_1440w_1920h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "0", "url": "http://www.xiachufang.com/recipe/103828361/"}, {"title": "无需面包机??徒手揉面?酸奶紫薯小餐包", "ratingValue": -1, "recipe": ["酸奶(超市买的)", "高筋面粉", "低筋面粉", "糖", "鸡蛋", "盐", "耐高糖酵母", "无盐黄油"], "img": "http://i2.chuimg.com/097e12ac69a2494f89e4733204389f6d_1152w_2304h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "1", "url": "http://www.xiachufang.com/recipe/103817988/"}, {"title": "懒人专用面包机版馒头", "ratingValue": -1, "recipe": ["水", "酵母", "糖", "中筋面粉"], "img": "http://i1.chuimg.com/9c4cb61348644f99b46a7f892490e0ef_2304w_1152h.jpg@2o_50sh_1pr_1l_660w_90q_1wh", "cooked_num": "0", "url": "http://www.xiachufang.com/recipe/103816062/"}, {"title": "香煎紫薯面包（改良版）", "ratingValue": -1, "recipe": ["无边面包", "紫薯", "鸡蛋", "盐", "油", "擀面杖"], "img": "http://i2.chuimg.com/8a7c258d3a454e62832d7d4530fb3545_1080w_810h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "1", "url": "http://www.xiachufang.com/recipe/103830792/"}, {"title": "玉米沙拉芝士面包（乖乖与臭臭的妈妈）", "ratingValue": -1, "recipe": ["玉米", "沙拉酱", "高筋面粉"], "img": "http://i2.chuimg.com/f8d4707c220443e3a68a5726bb83b0e5_1280w_1024h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "2", "url": "http://www.xiachufang.com/recipe/103819358/"}, {"title": "蜂蜜燕麦片果干面包", "ratingValue": -1, "recipe": ["高筋粉", "免煮燕麦片", "蜂蜜", "纯牛奶", "橄榄油", "酵母粉", "盐"], "img": "http://i2.chuimg.com/bc2b23ba8a1811e6b87c0242ac110003_800w_531h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "19", "url": "http://www.xiachufang.com/recipe/100633425/"}, {"title": "黄糖面包", "ratingValue": -1, "recipe": ["黄糖", "黄油", "糖霜", "盐", "奶油", "酵母", "蛋液"], "img": "http://i1.chuimg.com/6cbd50cae8e1437fbc212805ca3aa3cb_1268w_1523h.jpg@2o_50sh_1pr_1l_660w_90q_1wh", "cooked_num": "0", "url": "http://www.xiachufang.com/recipe/103686781/"}, {"title": "味增面包", "ratingValue": -1, "recipe": ["高粉", "味增", "水", "酵母", "盐", "蛋液", "黄油", "葱花", "胡椒"], "img": "http://i2.chuimg.com/be0761ea873311e6b87c0242ac110003_490w_732h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "14", "url": "http://www.xiachufang.com/recipe/261491/"}, {"title": "小红帽面包", "ratingValue": -1, "recipe": ["红色面团材料：", "高筋面粉", "低筋面粉", "牛奶", "糖", "盐", "酵母", "红曲粉", "黄油", "白色面团（配方见“奥特曼面包”）", "装饰用：", "深黑可可粉（调水）或巧克力"], "img": "http://i2.chuimg.com/7ab2fe58267111e7947d0242ac110002_2100w_2100h.jpg?imageView2/2/w/660/interlace/1/q/90", "cooked_num": "8", "url": "http://www.xiachufang.com/recipe/102266137/"}]}) -->
 
 
         function showData(data){
@@ -334,7 +224,7 @@ $input.change(function() {
 
             for (var i = 0; i < num_items_cur_page; i++){
                 var cur_item = data["items"][i]
-                $('.search-results').append("<div class='panel panel-info'> <div class='panel-heading'><span class='label label-primary'>" + types[Number(cur_item["type"])] + "</span> &nbsp;<span class='label label-default' style='float:right'>" + cur_item["date"] + "</span> &nbsp;<span class='label label-info' style='float:right'>综合评分" + cur_item["score"] + "</span><a href=" + cur_item["url"] + " alt=" + cur_item["url"] + " target='_blank'> " + cur_item["title"] + "</a></div><div class='panel-body media' style='padding-top:0'><div class='media-left'><img class='media-object thumbnail' src=" + cur_item["imgurl"] + " alt=" + cur_item["imgurl"] + " style='max-width:250px; max-height:200px'></div><div class='media-body'>" + cur_item["content"] + "</div></div></div>")
+                $('.search-results').append("<div class='panel panel-info'> <div class='panel-heading'>" + " <span class='label label-primary' style='float:right'>" + cur_item["cooked_num"] + "人做过</span> <span class='label label-info' style='float:right'>综合评分" + cur_item["ratingValue"] + "</span><a href=" + cur_item["url"] + " alt=" + cur_item["url"] + " target='_blank'> " + cur_item["title"] + "</a></div><div class='panel-body media' style='padding-top:0'><div class='media-left'><img class='media-object thumbnail' src=" + cur_item["img"] + " alt=" + cur_item["img"] + " style='max-width:250px; max-height:200px'></div><div class='media-body'>" + cur_item["recipe"] + "</div></div></div>")
             }
 
             if (page == 1){
